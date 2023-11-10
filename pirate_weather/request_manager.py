@@ -3,6 +3,7 @@ from aiohttp import ClientSession
 
 from .exceptions import PirateWeatherException
 
+import json
 
 class BaseRequestManger:
     def __init__(self, gzip: bool):
@@ -47,6 +48,6 @@ class RequestMangerAsync(BaseRequestManger):
         ) as resp:
             response = await resp.json()
             if resp.status != 200:
-                raise PirateWeatherException(resp.status, resp._body)
+                raise PirateWeatherException(resp.status, json.loads(resp._body))
         response["timezone"] = params.get("timezone") or response["timezone"]
         return response
