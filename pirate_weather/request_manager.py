@@ -46,7 +46,7 @@ class RequestMangerAsync(BaseRequestManger):
                 url, params=params, headers=self.headers
         ) as resp:
             response = await resp.json()
-            if "error" in response:
-                raise PirateWeatherException(response["code"], response["error"])
+            if resp.status != 200:
+                raise PirateWeatherException(resp.status, resp._body)
         response["timezone"] = params.get("timezone") or response["timezone"]
         return response
